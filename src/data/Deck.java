@@ -17,7 +17,7 @@ public class Deck {
     }
 
     public void shuffle(){
-        //ToDo
+
         rnd = new Random();
 
         for(int i = 52 ; i > 0 ; i--){
