@@ -7,8 +7,9 @@ public class PokerAi {
         System.out.println("--> PokerAI <--");
         Deck deck = new Deck();
 
-        System.out.println(deck.getCard().toString());
-        System.out.println(deck.getCard().toString());
+        for(int i = 1 ; i <= 52 ; i ++) {
+            System.out.println(i+": "+deck.getCard().toString());
+        }
 
     }
 }
