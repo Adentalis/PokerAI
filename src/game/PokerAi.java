@@ -1,6 +1,7 @@
 package game;
 
 import data.Deck;
+import gui.TestBoard;
 
 public class PokerAi {
     public static void main(String[] args) {
@@ -10,6 +11,8 @@ public class PokerAi {
         for(int i = 1 ; i <= 52 ; i ++) {
             System.out.println(i+": "+deck.getCard().toString());
         }
+
+        TestBoard board = new TestBoard();
 
     }
 }
