@@ -1,8 +1,12 @@
 package game;
 
+import data.Card;
 import data.Deck;
+import data.Hand;
 import player.HumanPlayer;
 import player.Player;
+
+import java.util.ArrayList;
 
 public class Game {
     public Player player1;
@@ -17,7 +21,25 @@ public class Game {
         player2 = p2;
 
         initGame();
+        test();
         startGame();
+    }
+
+    public Game(){
+
+        initGame();
+        test();
+        startGame();
+    }
+
+    private void test() {
+        ArrayList<Card> cards = new ArrayList<>();
+        for(int i = 0 ; i < 7 ; i ++) {
+            cards.add(deck.getCard());
+        }
+        Hand h = new Hand(cards);
+        h.validateHand();
+
     }
 
     private void initGame() {
@@ -28,8 +50,7 @@ public class Game {
     }
 
     private void startGame() {
-        round = 2;
-        System.out.println(round);
+
 
 
 
