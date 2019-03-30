@@ -7,9 +7,9 @@ public class PokerAi {
     public static void main(String[] args) {
         System.out.println("--> PokerAI <--");
 
-        Game game = new Game();
+        //Game game = new Game();
 
-        //TestBoard board = new TestBoard();
+        TestBoard board = new TestBoard();
 
     }
 
