@@ -19,28 +19,30 @@ public class TestBoard implements ActionListener, Serializable {
         jframe.setDefaultCloseOperation(3);
 
 
-        card1 = new JButton("f");
-        card1.setBackground(Color.GREEN);
+        card1 = new JButton();
         card1.setSize(100,160);
         card1.setLocation(500,500);
 
-        card2 = new JButton("f");
-        card2.setBackground(Color.GREEN);
+        card2 = new JButton();
         card2.setSize(100,160);
-        card2.setLocation(610,500);
-
-
-
+        card2.setLocation(620,500);
 
         jframe.add(card1);
         jframe.add(card2);
-
-
 
         ImageIcon img = new ImageIcon("src/res/t.png");
         JLabel background = new JLabel("",img,JLabel.CENTER);
         background.setBounds(0,0,1200,800);
         jframe.add(background);
+
+
+        ImageIcon img1 = new ImageIcon("src/res/small/10C.jpg");
+        ImageIcon img2 = new ImageIcon("src/res/small/9H.jpg");
+
+        card1.setIcon(img1);
+        card2.setIcon(img2);
+
+
 
 
 
