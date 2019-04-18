@@ -1,5 +1,5 @@
 package data;
 
 public enum Colour {
-    HEARTS, DIAMOND, SPADE , CLUBS
+    HEARTS, DIAMOND, SPADE , CLUBS, NIL
 }
