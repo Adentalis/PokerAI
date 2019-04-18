@@ -11,7 +11,7 @@ public class Hand {
 
     }
      public void validateHand(){
-         System.out.println("dd");
+
         for(Card c : hand){
             System.out.println(c.toString());
         }

@@ -19,7 +19,7 @@ public class Card {
     }
 
     public String toString(){
-        return getShowValue() + "("+colour+") ";
+        return getShowValue() + "("+colour+")";
     }
 
     private String getShowValue() {
@@ -41,7 +41,7 @@ public class Card {
             case NINE:
                 return "9";
             case TEN:
-                return "T";
+                return "10";
             case JACK:
                 return "J";
             case QUEEN:
