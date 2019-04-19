@@ -97,8 +97,10 @@ public class MainBoard implements ActionListener, Serializable {
 
     @Override
     public void actionPerformed(ActionEvent e) {
+        System.out.println(e.getSource());
+
         if (e.getSource() == this.card1) {
-            System.out.println("d");
+            System.out.println("But)"+e.getSource());
         }
 
     }

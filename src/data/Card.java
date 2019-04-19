@@ -4,10 +4,12 @@ public class Card implements Comparable<Card>{
 
     private final Colour colour;
     private final Value value;
+    public int id;
 
     public Card(Colour c, Value v){
         this.colour = c;
         this.value = v ;
+        this.id =0;
     }
 
     public Colour getColour() {

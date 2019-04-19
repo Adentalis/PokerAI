@@ -3,13 +3,17 @@ package game;
 import data.Card;
 import data.Deck;
 import data.Hand;
+import gui.HandTestGui;
 import gui.MainBoard;
+
 
 import java.util.ArrayList;
 
 
 public class PokerAi {
-    public static void main(String[] args) {
+    public static void main(String[] args)
+
+    {
         System.out.println("--> PokerAI <--");
         //Game game = new Game();
         MainBoard board = new MainBoard();
@@ -24,7 +28,9 @@ public class PokerAi {
         board.showHandOnGui(sortedHand_array);
         */
 
-        //ArrayList<Card> bestHand_array = hand.validateHand();
+        HandTestGui handTestGui = new HandTestGui();
+
+        ArrayList<Card> bestHand_array = hand.validateHand();
 
 
     }
