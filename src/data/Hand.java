@@ -14,6 +14,7 @@ public class Hand  {
 
     int[] cardCounter;
     int pairCounter;
+    Value straightValue;
 
 
 
@@ -43,11 +44,27 @@ public class Hand  {
         isPairs();
         isFlush();
         isFullHouse();
-
-
+        isStraight();
+        //todo check for straight flush then ....
 
          return bestHand;
      }
+
+    private void isStraight() {
+        for(int i = 0 ; i < cardCounter.length; i++){
+            System.out.print(cardCounter[i]);
+        }
+        System.out.println();
+
+        for(int i = 0 ; i < cardCounter.length-4; i++){
+            System.out.print(cardCounter[i]);
+        }
+        System.out.println();
+
+        //TODO check for straight
+
+
+    }
 
     private void isFullHouse() {
         fullHouse = false;

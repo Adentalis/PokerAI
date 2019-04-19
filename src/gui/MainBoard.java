@@ -5,20 +5,21 @@ import data.Deck;
 import data.Hand;
 
 import javax.swing.*;
+import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-public class TestBoard implements ActionListener, Serializable {
+public class MainBoard implements ActionListener, Serializable {
     private JFrame jframe = new JFrame("AntiCHESS");
 
-    public JButton card1, card2, flop1 , flop2 , flop3 ,turn, river;
+    public JButton card1, card2, flop1, flop2, flop3, turn, river;
     public JButton[] cardButtons = new JButton[7];
 
-    public TestBoard(){
-        jframe.setSize(1200,800);
+    public MainBoard() {
+        jframe.setSize(1200, 800);
         Dimension dimension = Toolkit.getDefaultToolkit().getScreenSize();
         jframe.setLocation(dimension.width / 2 - this.jframe.getSize().width / 2, dimension.height / 2 - this.jframe.getSize().height / 2);
         jframe.setDefaultCloseOperation(3);
@@ -26,12 +27,9 @@ public class TestBoard implements ActionListener, Serializable {
         initCards();
 
         ImageIcon img = new ImageIcon("src/res/t.png");
-        JLabel background = new JLabel("",img,JLabel.CENTER);
-        background.setBounds(0,0,1200,800);
+        JLabel background = new JLabel("", img, JLabel.CENTER);
+        background.setBounds(0, 0, 1200, 800);
         jframe.add(background);
-
-
-
 
 
         jframe.setVisible(true);
@@ -39,32 +37,35 @@ public class TestBoard implements ActionListener, Serializable {
 
     private void initCards() {
         card1 = new JButton();
-        card1.setSize(100,160);
-        card1.setLocation(490,500);
+        card1.setSize(100, 160);
+        card1.setLocation(490, 500);
+        card1.addActionListener(this);
+        //card1.setBorder(new LineBorder(Color.GREEN,3));
+
 
         card2 = new JButton();
-        card2.setSize(100,160);
-        card2.setLocation(610,500);
+        card2.setSize(100, 160);
+        card2.setLocation(610, 500);
 
         flop1 = new JButton();
-        flop1.setSize(100,160);
-        flop1.setLocation(310,300);
+        flop1.setSize(100, 160);
+        flop1.setLocation(310, 300);
 
         flop2 = new JButton();
-        flop2.setSize(100,160);
-        flop2.setLocation(430,300);
+        flop2.setSize(100, 160);
+        flop2.setLocation(430, 300);
 
         flop3 = new JButton();
-        flop3.setSize(100,160);
-        flop3.setLocation(550,300);
+        flop3.setSize(100, 160);
+        flop3.setLocation(550, 300);
 
         turn = new JButton();
-        turn.setSize(100,160);
-        turn.setLocation(670,300);
+        turn.setSize(100, 160);
+        turn.setLocation(670, 300);
 
         river = new JButton();
-        river.setSize(100,160);
-        river.setLocation(790,300);
+        river.setSize(100, 160);
+        river.setLocation(790, 300);
 
         ImageIcon img1 = new ImageIcon("src/res/small/10C.jpg");
         card1.setIcon(img1);
@@ -75,13 +76,13 @@ public class TestBoard implements ActionListener, Serializable {
         turn.setIcon(img1);
         river.setIcon(img1);
 
-        cardButtons[0]=card1;
-        cardButtons[1]=card2;
-        cardButtons[2]=flop1;
-        cardButtons[3]=flop2;
-        cardButtons[4]=flop3;
-        cardButtons[5]=turn;
-        cardButtons[6]=river;
+        cardButtons[0] = card1;
+        cardButtons[1] = card2;
+        cardButtons[2] = flop1;
+        cardButtons[3] = flop2;
+        cardButtons[4] = flop3;
+        cardButtons[5] = turn;
+        cardButtons[6] = river;
 
 
         jframe.add(card1);
@@ -96,11 +97,15 @@ public class TestBoard implements ActionListener, Serializable {
 
     @Override
     public void actionPerformed(ActionEvent e) {
+        if (e.getSource() == this.card1) {
+            System.out.println("d");
+        }
 
     }
-    private ImageIcon getImageIconForCard(Card card){
+
+    private ImageIcon getImageIconForCard(Card card) {
         ImageIcon img;
-        switch (card.toString()){
+        switch (card.toString()) {
             case "2(HEARTS)":
                 img = new ImageIcon("src/res/small/2H.jpg");
                 break;
@@ -271,7 +276,7 @@ public class TestBoard implements ActionListener, Serializable {
 
     public void update7Cards(Hand hand) {
 
-        for(int i = 0; i<cardButtons.length;i++){
+        for (int i = 0; i < cardButtons.length; i++) {
             ImageIcon img = getImageIconForCard(hand.hand.get(i));
 
             cardButtons[i].setIcon(img);
@@ -281,50 +286,50 @@ public class TestBoard implements ActionListener, Serializable {
 
     public void showHandOnGui(ArrayList<Card> bestHand_array) {
         JFrame jframeBest = new JFrame("BEST-HAND-GUI");
-        jframeBest.setSize(880,255);
+        jframeBest.setSize(880, 255);
         Dimension dimension = Toolkit.getDefaultToolkit().getScreenSize();
         jframeBest.setLocation(dimension.width / 2 - this.jframe.getSize().width / 2, dimension.height / 2 - this.jframe.getSize().height / 2);
         jframeBest.setVisible(true);
 
-        JButton bestcard1, bestcard2 ,bestflop1,bestflop2,bestflop3, bestturn, bestriver;
+        JButton bestcard1, bestcard2, bestflop1, bestflop2, bestflop3, bestturn, bestriver;
         JButton[] bestcardButtons_array = new JButton[7];
         bestcard1 = new JButton();
-        bestcard1.setSize(100,160);
-        bestcard1.setLocation(30,30);
+        bestcard1.setSize(100, 160);
+        bestcard1.setLocation(30, 30);
 
         bestcard2 = new JButton();
-        bestcard2.setSize(100,160);
-        bestcard2.setLocation(145,30);
+        bestcard2.setSize(100, 160);
+        bestcard2.setLocation(145, 30);
 
         bestflop1 = new JButton();
-        bestflop1.setSize(100,160);
-        bestflop1.setLocation(260,30);
+        bestflop1.setSize(100, 160);
+        bestflop1.setLocation(260, 30);
 
         bestflop2 = new JButton();
-        bestflop2.setSize(100,160);
-        bestflop2.setLocation(375,30);
+        bestflop2.setSize(100, 160);
+        bestflop2.setLocation(375, 30);
 
         bestflop3 = new JButton();
-        bestflop3.setSize(100,160);
-        bestflop3.setLocation(490,30);
+        bestflop3.setSize(100, 160);
+        bestflop3.setLocation(490, 30);
 
         bestturn = new JButton();
-        bestturn.setSize(100,160);
-        bestturn.setLocation(605,30);
+        bestturn.setSize(100, 160);
+        bestturn.setLocation(605, 30);
 
         bestriver = new JButton();
-        bestriver.setSize(100,160);
-        bestriver.setLocation(720,30);
+        bestriver.setSize(100, 160);
+        bestriver.setLocation(720, 30);
 
-        bestcardButtons_array[0]=bestcard1;
-        bestcardButtons_array[1]=bestcard2;
-        bestcardButtons_array[2]=bestflop1;
-        bestcardButtons_array[3]=bestflop2;
-        bestcardButtons_array[4]=bestflop3;
-        bestcardButtons_array[5]=bestturn;
-        bestcardButtons_array[6]=bestriver;
+        bestcardButtons_array[0] = bestcard1;
+        bestcardButtons_array[1] = bestcard2;
+        bestcardButtons_array[2] = bestflop1;
+        bestcardButtons_array[3] = bestflop2;
+        bestcardButtons_array[4] = bestflop3;
+        bestcardButtons_array[5] = bestturn;
+        bestcardButtons_array[6] = bestriver;
 
-        for(int i = 0; i<bestcardButtons_array.length;i++){
+        for (int i = 0; i < bestcardButtons_array.length; i++) {
             ImageIcon img = getImageIconForCard(bestHand_array.get(i));
 
             bestcardButtons_array[i].setIcon(img);
@@ -339,8 +344,8 @@ public class TestBoard implements ActionListener, Serializable {
         jframeBest.add(bestriver);
 
         ImageIcon img = new ImageIcon("src/res/t.png");
-        JLabel background = new JLabel("",img,JLabel.CENTER);
-        background.setBounds(0,0,1200,800);
+        JLabel background = new JLabel("", img, JLabel.CENTER);
+        background.setBounds(0, 0, 1200, 800);
         jframeBest.add(background);
     }
 }

@@ -16,7 +16,7 @@ public class Game {
 
     public Deck deck;
 
-    public Game(Player p1, Player p2){
+    public Game(Player p1, Player p2) {
         player1 = p1;
         player2 = p2;
 
@@ -25,7 +25,7 @@ public class Game {
         startGame();
     }
 
-    public Game(){
+    public Game() {
 
         initGame();
         test();
@@ -34,7 +34,7 @@ public class Game {
 
     private void test() {
         ArrayList<Card> cards = new ArrayList<>();
-        for(int i = 0 ; i < 7 ; i ++) {
+        for (int i = 0; i < 7; i++) {
             cards.add(deck.getCard());
         }
         Hand h = new Hand(cards);
@@ -50,8 +50,6 @@ public class Game {
     }
 
     private void startGame() {
-
-
 
 
     }
