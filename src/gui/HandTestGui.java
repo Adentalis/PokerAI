@@ -123,7 +123,7 @@ public class HandTestGui implements ActionListener, KeyListener {
             if (i == 19)
                 cardButtonsArrayList.get(counter).setIcon(new ImageIcon("src/res/small/8D.jpg"));
             if (i == 20)
-                cardButtonsArrayList.get(counter).setIcon(new ImageIcon("src/res/small/7D.jpg"));
+                cardButtonsArrayList.get(counter).setIcon( new ImageIcon("src/res/small/7D.jpg"));
             if (i == 21)
                 cardButtonsArrayList.get(counter).setIcon(new ImageIcon("src/res/small/6D.jpg"));
             if (i == 22)
