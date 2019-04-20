@@ -37,7 +37,7 @@ public class Hand  {
 
     }
 
-     public ArrayList<Card> validateHand(){
+     public void validateHand(){
         countCards();
         isQuads();
         isTrips();
@@ -47,7 +47,7 @@ public class Hand  {
         isStraight();
         //todo check for straight flush then ....
 
-         return bestHand;
+
      }
 
     private void isStraight() {
@@ -57,7 +57,7 @@ public class Hand  {
         System.out.println();
 
         for(int i = 0 ; i < cardCounter.length-4; i++){
-            System.out.print(cardCounter[i]);
+           System.out.print(cardCounter[i]);
         }
         System.out.println();
 

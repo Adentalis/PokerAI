@@ -1,23 +1,39 @@
 package gui;
 
+import data.Card;
+import data.Colour;
+import data.Hand;
+import data.Value;
+
 import javax.swing.*;
+import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.util.ArrayList;
 
 
-public class HandTestGui implements ActionListener {
+public class HandTestGui implements ActionListener, KeyListener {
     private final int AMOUNTOFCARDS = 52;
     private JFrame jframe = new JFrame("CREATE A HAND");
     ArrayList<JButton> cardButtonsArrayList;
+    MainBoard mainBoard;
+    ArrayList<Integer> choosenCards;
+    //TODO continue to try overgive data of one jframe to another
 
-    public HandTestGui() {
-        jframe.setSize(1700, 800);
+    public HandTestGui(MainBoard mainBoard) {
+        this.mainBoard = mainBoard;
+        choosenCards = new ArrayList<>();
+
+        jframe.setSize(1850, 800);
         Dimension dimension = Toolkit.getDefaultToolkit().getScreenSize();
-        jframe.setLocation((dimension.width / 2 - this.jframe.getSize().width / 2) + 1850, (dimension.height / 2 - this.jframe.getSize().height / 2) - 110);
+        jframe.setLocation((dimension.width / 2 - this.jframe.getSize().width / 2) + 1900, (dimension.height / 2 - this.jframe.getSize().height / 2) - 110);
         jframe.setDefaultCloseOperation(3);
+        jframe.setFocusable(true);
+
         jframe.setLayout(new LayoutManager() {
             @Override
             public void addLayoutComponent(String name, Component comp) {
@@ -47,6 +63,7 @@ public class HandTestGui implements ActionListener {
 
         initCardButtons();
         jframe.setVisible(true);
+        jframe.addKeyListener(this);
     }
 
     private void initCardButtons() {
@@ -64,7 +81,7 @@ public class HandTestGui implements ActionListener {
         }
         int counter = 0;
 
-        for(int i = 0 ; i < AMOUNTOFCARDS; i++) {
+        for (int i = 0; i < AMOUNTOFCARDS; i++) {
             if (i == 0)
                 cardButtonsArrayList.get(counter).setIcon(new ImageIcon("src/res/small/AH.jpg"));
             if (i == 1)
@@ -293,12 +310,177 @@ public class HandTestGui implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        System.out.println(e.getSource());
+        int counter = 0;
+        JButton test = (JButton) e.getSource();
+
+        for (JButton jButton : cardButtonsArrayList) {
+            if (jButton == test) {
+                //TODO just allow 7 cards
+                if (choosenCards.contains(counter)) {
+                    choosenCards.remove(Integer.valueOf(counter));
+                    jButton.setBorder(null);
+                } else {
+                    choosenCards.add(counter);
+                    jButton.setBorder(new LineBorder(Color.ORANGE, 5));
+                }
 
 
+            }
+
+            counter++;
+        }
+
+
+
+        jframe.requestFocus();
 
     }
 
 
+    @Override
+    public void keyTyped(KeyEvent e) {
 
+    }
+
+    @Override
+    public void keyPressed(KeyEvent e) {
+
+    }
+
+    @Override
+    public void keyReleased(KeyEvent e) {
+        if (e.getKeyCode() == KeyEvent.VK_E) {
+            updateHandOnMainGui();
+
+
+
+        }
+    }
+
+    private void updateHandOnMainGui() {
+        ArrayList<Card> hand_array = new ArrayList<>();
+
+        for (Integer i : choosenCards) {
+            hand_array.add(createNewCard(i));
+        }
+        Hand hand = new Hand(hand_array);
+        mainBoard.update7Cards(hand);
+        mainBoard.showHandOnGui(hand_array);
+        hand.validateHand();
+
+    }
+
+    private Card createNewCard(Integer i) {
+
+        if (i == 0)
+            return new Card(Colour.HEARTS, Value.ACE);
+        if (i == 1)
+            return new Card(Colour.HEARTS, Value.KING);
+        if (i == 2)
+            return new Card(Colour.HEARTS, Value.QUEEN);
+        if (i == 3)
+            return new Card(Colour.HEARTS, Value.JACK);
+        if (i == 4)
+            return new Card(Colour.HEARTS, Value.TEN);
+        if (i == 5)
+            return new Card(Colour.HEARTS, Value.NINE);
+        if (i == 6)
+            return new Card(Colour.HEARTS, Value.EIGEHT);
+        if (i == 7)
+            return new Card(Colour.HEARTS, Value.SEVEN);
+        if (i == 8)
+            return new Card(Colour.HEARTS, Value.SIX);
+        if (i == 9)
+            return new Card(Colour.HEARTS, Value.FIVE);
+        if (i == 10)
+            return new Card(Colour.HEARTS, Value.FOUR);
+        if (i == 11)
+            return new Card(Colour.HEARTS, Value.THREE);
+        if (i == 12)
+            return new Card(Colour.HEARTS, Value.TWO);
+
+        if (i == 13)
+            return new Card(Colour.DIAMOND, Value.ACE);
+        if (i == 14)
+            return new Card(Colour.DIAMOND, Value.KING);
+        if (i == 15)
+            return new Card(Colour.DIAMOND, Value.QUEEN);
+        if (i == 16)
+            return new Card(Colour.DIAMOND, Value.JACK);
+        if (i == 17)
+            return new Card(Colour.DIAMOND, Value.TEN);
+        if (i == 18)
+            return new Card(Colour.DIAMOND, Value.NINE);
+        if (i == 19)
+            return new Card(Colour.DIAMOND, Value.EIGEHT);
+        if (i == 20)
+            return new Card(Colour.DIAMOND, Value.SEVEN);
+        if (i == 21)
+            return new Card(Colour.DIAMOND, Value.SIX);
+        if (i == 22)
+            return new Card(Colour.DIAMOND, Value.FIVE);
+        if (i == 23)
+            return new Card(Colour.DIAMOND, Value.FOUR);
+        if (i == 24)
+            return new Card(Colour.DIAMOND, Value.THREE);
+        if (i == 25)
+            return new Card(Colour.DIAMOND, Value.TWO);
+
+        if (i == 26)
+            return new Card(Colour.CLUBS, Value.ACE);
+        if (i == 27)
+            return new Card(Colour.CLUBS, Value.KING);
+        if (i == 28)
+            return new Card(Colour.CLUBS, Value.QUEEN);
+        if (i == 29)
+            return new Card(Colour.CLUBS, Value.JACK);
+        if (i == 30)
+            return new Card(Colour.CLUBS, Value.TEN);
+        if (i == 31)
+            return new Card(Colour.CLUBS, Value.NINE);
+        if (i == 32)
+            return new Card(Colour.CLUBS, Value.EIGEHT);
+        if (i == 33)
+            return new Card(Colour.CLUBS, Value.SEVEN);
+        if (i == 34)
+            return new Card(Colour.CLUBS, Value.SIX);
+        if (i == 35)
+            return new Card(Colour.CLUBS, Value.FIVE);
+        if (i == 36)
+            return new Card(Colour.CLUBS, Value.FOUR);
+        if (i == 37)
+            return new Card(Colour.CLUBS, Value.THREE);
+        if (i == 38)
+            return new Card(Colour.CLUBS, Value.TWO);
+
+        if (i == 39)
+            return new Card(Colour.SPADE, Value.ACE);
+        if (i == 40)
+            return new Card(Colour.SPADE, Value.KING);
+        if (i == 41)
+            return new Card(Colour.SPADE, Value.QUEEN);
+        if (i == 42)
+            return new Card(Colour.SPADE, Value.JACK);
+        if (i == 43)
+            return new Card(Colour.SPADE, Value.TEN);
+        if (i == 44)
+            return new Card(Colour.SPADE, Value.NINE);
+        if (i == 45)
+            return new Card(Colour.SPADE, Value.EIGEHT);
+        if (i == 46)
+            return new Card(Colour.SPADE, Value.SEVEN);
+        if (i == 47)
+            return new Card(Colour.SPADE, Value.SIX);
+        if (i == 48)
+            return new Card(Colour.SPADE, Value.FIVE);
+        if (i == 49)
+            return new Card(Colour.SPADE, Value.FOUR);
+        if (i == 50)
+            return new Card(Colour.SPADE, Value.THREE);
+        if (i == 51)
+            return new Card(Colour.SPADE, Value.TWO);
+
+        System.out.println("THIS SHOULD NOT HAPPEN - createNewCard default");
+        return new Card(null,null);
+    }
 }

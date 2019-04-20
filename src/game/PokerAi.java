@@ -16,21 +16,21 @@ public class PokerAi {
     {
         System.out.println("--> PokerAI <--");
         //Game game = new Game();
-        MainBoard board = new MainBoard();
+        MainBoard mainBoard = new MainBoard();
 
         ArrayList<Card> hand_array = createNewHand();
 
         Hand hand = new Hand(hand_array);
-        board.update7Cards(hand);
+        mainBoard.update7Cards(hand);
 
         /*open the sortedCards Gui
         ArrayList<Card> sortedHand_array = hand.getSortedHand();
         board.showHandOnGui(sortedHand_array);
         */
 
-        HandTestGui handTestGui = new HandTestGui();
+        HandTestGui handTestGui = new HandTestGui(mainBoard);
 
-        ArrayList<Card> bestHand_array = hand.validateHand();
+        hand.validateHand();
 
 
     }
