@@ -1,17 +1,17 @@
 package gui;
 
 import data.Card;
-import data.Deck;
+
 import data.Hand;
 
 import javax.swing.*;
-import javax.swing.border.LineBorder;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Collections;
+
 
 public class MainBoard implements ActionListener, Serializable {
     private JFrame jframe = new JFrame("AntiCHESS");
@@ -70,6 +70,7 @@ public class MainBoard implements ActionListener, Serializable {
         river.setSize(100, 160);
         river.setLocation(790, 300);
 
+        /*
         ImageIcon img1 = new ImageIcon("src/res/small/10C.jpg");
         card1.setIcon(img1);
         card2.setIcon(img1);
@@ -78,6 +79,7 @@ public class MainBoard implements ActionListener, Serializable {
         flop3.setIcon(img1);
         turn.setIcon(img1);
         river.setIcon(img1);
+        */
 
         cardButtons[0] = card1;
         cardButtons[1] = card2;
@@ -302,7 +304,7 @@ public class MainBoard implements ActionListener, Serializable {
         jframeBest.setLocation(dimension.width / 2 - this.jframe.getSize().width / 2, dimension.height / 2 - this.jframe.getSize().height / 2);
         jframeBest.setVisible(true);
 
-        Collections.sort(bestHand_array);
+        //Collections.sort(bestHand_array);
 
         JButton bestcard1, bestcard2, bestflop1, bestflop2, bestflop3, bestturn, bestriver;
         JButton[] bestcardButtons_array = new JButton[7];

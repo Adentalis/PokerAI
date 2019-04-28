@@ -37,7 +37,7 @@ public class Hand {
     }
 
 
-    public ArrayList<Card> createBestHand() {
+    public ArrayList<Card> getBestHand() {
         if (royalFlush)
             return createRoyalFlush();
         if (straightFlush)
@@ -78,6 +78,8 @@ public class Hand {
 
     private ArrayList<Card> createFullHouse() {
         System.out.println("volles haus");
+
+
         return null;
 
 
@@ -139,7 +141,6 @@ public class Hand {
         quads = false;
         for (int i = 0; i < cardCounter.length; i++) {
             if (cardCounter[i] == 4) {
-                System.out.println("QUADS!!!");
                 quads = true;
             }
         }
@@ -149,7 +150,6 @@ public class Hand {
     private void isFullHouse() {
         fullHouse = false;
         if (trips && pair) {
-            System.out.println("FULL HOUSE :)");
             fullHouse = true;
         }
     }

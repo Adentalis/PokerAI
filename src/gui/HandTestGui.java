@@ -352,8 +352,6 @@ public class HandTestGui implements ActionListener, KeyListener {
         if (e.getKeyCode() == KeyEvent.VK_E) {
             updateHandOnMainGui();
 
-
-
         }
     }
 
@@ -367,6 +365,8 @@ public class HandTestGui implements ActionListener, KeyListener {
         mainBoard.update7Cards(hand);
         mainBoard.showHandOnGui(hand_array);
         hand.validateHand();
+        ArrayList<Card> best = hand.getBestHand();
+        mainBoard.showHandOnGui(best);
 
     }
 
