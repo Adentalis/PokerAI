@@ -19,13 +19,12 @@ import java.util.ArrayList;
 public class HandTestGui implements ActionListener, KeyListener {
     private final int AMOUNTOFCARDS = 52;
     private JFrame jframe = new JFrame("CREATE A HAND");
-    ArrayList<JButton> cardButtonsArrayList;
-    MainBoard mainBoard;
-    ArrayList<Integer> choosenCards;
-    //TODO continue to try overgive data of one jframe to another
 
-    public HandTestGui(MainBoard mainBoard) {
-        this.mainBoard = mainBoard;
+    ArrayList<JButton> cardButtonsArrayList;
+    ArrayList<Integer> choosenCards;
+
+
+    public HandTestGui() {
         choosenCards = new ArrayList<>();
 
         jframe.setSize(1850, 800);
@@ -323,15 +322,9 @@ public class HandTestGui implements ActionListener, KeyListener {
                     choosenCards.add(counter);
                     jButton.setBorder(new LineBorder(Color.ORANGE, 5));
                 }
-
-
             }
-
             counter++;
         }
-
-
-
         jframe.requestFocus();
 
     }
@@ -350,10 +343,26 @@ public class HandTestGui implements ActionListener, KeyListener {
     @Override
     public void keyReleased(KeyEvent e) {
         if (e.getKeyCode() == KeyEvent.VK_E) {
-            updateHandOnMainGui();
+           // updateHandOnMainGui();
+            //creates hand out of choosen cards and validate it
+            testHand();
 
         }
     }
+
+    private void testHand() {
+        ArrayList<Card> hand_array = new ArrayList<>();
+
+        for (Integer i : choosenCards) {
+            hand_array.add(createNewCard(i));
+        }
+        Hand hand = new Hand(hand_array);
+
+
+
+
+    }
+
 
     private void updateHandOnMainGui() {
         ArrayList<Card> hand_array = new ArrayList<>();
@@ -362,11 +371,11 @@ public class HandTestGui implements ActionListener, KeyListener {
             hand_array.add(createNewCard(i));
         }
         Hand hand = new Hand(hand_array);
-        mainBoard.update7Cards(hand);
-        mainBoard.showHandOnGui(hand_array);
+       // mainBoard.update7Cards(hand);
+        //mainBoard.showHandOnGui(hand_array);
         hand.validateHand();
         ArrayList<Card> best = hand.getBestHand();
-        mainBoard.showHandOnGui(best);
+       // mainBoard.showHandOnGui(best);
 
     }
 

@@ -4,18 +4,22 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 public class Hand {
+    private long value;
 
     public ArrayList<Card> hand;
     public ArrayList<Card> sortedHand;
     public ArrayList<Card> bestHand;
+    public ArrayList<Card> dummyHand;
 
     private Colour colourOfFlush;
+    private Value straightValue;
+
     private int[] flushCounter;
 
     private int[] cardCounter;
     private int pairCounter;
-    private Value straightValue;
 
+    public String bestHandToString;
 
     private boolean royalFlush;
     private boolean straightFlush;
@@ -28,18 +32,37 @@ public class Hand {
     private boolean pair;
     private boolean highCard;
 
-
     public Hand(ArrayList<Card> hand) {
-        this.hand = hand;
-        this.bestHand = new ArrayList<>();
-        this.sortedHand = hand;
+        this.hand = getSortedHand(hand);
+        this.bestHand= new ArrayList<>();
+        validateHand();
 
     }
 
 
-    public ArrayList<Card> getBestHand() {
-        validateHand();
+    public void validateHand() {
+        bestHandToString = "";
+        dummyHand= hand;
+        cardCounter = countCards(this.hand);
+
+        countCards(this.hand);
         countPairs();
+        quads = isQuads();
+        trips = isTrips();
+        twoPair = isTwoPair();
+        pair= isPair();
+        flush = isFlush();
+        fullHouse = isFullHouse();
+        straight = isStraight();
+        straightFlush = isStraightFlush();
+        royalFlush = isRoyalFlush();
+        highCard  = isHighCard();
+        this.bestHand = getBestHand();
+        System.out.println(bestHandToString);
+        System.out.println("--------------");
+    }
+
+    public ArrayList<Card> getBestHand() {
         if (royalFlush)
             return createRoyalFlush();
         if (straightFlush)
@@ -66,63 +89,49 @@ public class Hand {
 
     }
 
-    public void validateHand() {
-        countCards();
-        quads = isQuads();
-        trips = isTrips();
-        twoPair = isTwoPair();
-        pair= isPair();
-        flush = isFlush();
-        fullHouse = isFullHouse();
-        straight = isStraight();
-        straightFlush = isStraightFlush();
-        royalFlush = isRoyalFlush();
-        highCard  = isHighCard();
-    }
-    private void countCards() {
-        cardCounter = new int[13];
-
-        //count the colours
-        for (Card c : sortedHand) {
+    private int[] countCards(ArrayList<Card> handOvergiven) {
+        int [] cardCounterX  = new int[13];
+        //count the values
+        for (Card c : handOvergiven) {
             switch (c.getValue()) {
                 case TWO:
-                    cardCounter[0] += 1;
+                    cardCounterX[0] += 1;
                     break;
                 case THREE:
-                    cardCounter[1] += 1;
+                    cardCounterX[1] += 1;
                     break;
                 case FOUR:
-                    cardCounter[2] += 1;
+                    cardCounterX[2] += 1;
                     break;
                 case FIVE:
-                    cardCounter[3] += 1;
+                    cardCounterX[3] += 1;
                     break;
                 case SIX:
-                    cardCounter[4] += 1;
+                    cardCounterX[4] += 1;
                     break;
                 case SEVEN:
-                    cardCounter[5] += 1;
+                    cardCounterX[5] += 1;
                     break;
                 case EIGEHT:
-                    cardCounter[6] += 1;
+                    cardCounterX[6] += 1;
                     break;
                 case NINE:
-                    cardCounter[7] += 1;
+                    cardCounterX[7] += 1;
                     break;
                 case TEN:
-                    cardCounter[8] += 1;
+                    cardCounterX[8] += 1;
                     break;
                 case JACK:
-                    cardCounter[9] += 1;
+                    cardCounterX[9] += 1;
                     break;
                 case QUEEN:
-                    cardCounter[10] += 1;
+                    cardCounterX[10] += 1;
                     break;
                 case KING:
-                    cardCounter[11] += 1;
+                    cardCounterX[11] += 1;
                     break;
                 case ACE:
-                    cardCounter[12] += 1;
+                    cardCounterX[12] += 1;
                     break;
 
                 default:
@@ -130,75 +139,218 @@ public class Hand {
                     break;
             }
         }
+        return cardCounterX;
+    }
 
+    private void countPairs() {
+        twoPair = false;
+        pair = false;
+        pairCounter = 0;
+        for (int aCardCounter : cardCounter) {
+
+            if (aCardCounter == 2) {
+                pair = true;
+                pairCounter++;
+            }
+        }
+        if (pairCounter > 1) {
+            twoPair = true;
+        }
     }
 
     private ArrayList<Card> createRoyalFlush() {
+        bestHandToString += "Royal Flush - ";
+
+        value = 99999999999L;
+        System.out.println(value);
         return null;
     }
 
     private ArrayList<Card> createStriaghtFlush() {
+        bestHandToString += "Straight Flush - ";
         return null;
     }
 
     private ArrayList<Card> createQuads() {
+        bestHandToString += "Quads - ";
         return null;
     }
 
     private ArrayList<Card> createFullHouse() {
-        System.out.println("volles haus");
-
-
+        bestHandToString += "Full House - ";
         return null;
-
-
     }
 
     private ArrayList<Card> createFlush() {
+        bestHandToString += "Flush - ";
         return null;
     }
 
     private ArrayList<Card> createStraight() {
+        bestHandToString += "Straight - ";
         return null;
     }
 
     private ArrayList<Card> createTrips() {
+        bestHandToString += "Trips - ";
         return null;
     }
 
     private ArrayList<Card> createTwoPair() {
+        bestHandToString += "Two Pair - ";
         return null;
     }
 
     private ArrayList<Card> createPair() {
+        bestHandToString += "Pair ";
         return null;
     }
 
     private ArrayList<Card> createHighCard() {
+        bestHandToString += "Highcard ";
+        for(int i = 0 ; i < 5 ; i ++) {
+            Card choosen = getHighcardOfHand();
+            bestHand.add(choosen);
+            dummyHand.remove(choosen);
+
+        }
+        System.out.println(bestHandToString);
+        return bestHand;
+    }
+
+    //looks in dummy for the highest valued card
+    private Card getHighcardOfHand(){
+        int [] dummyCardCounter = countCards(dummyHand);
+        Value toSearch;
+        if(dummyCardCounter[12] >= 1){
+            System.out.println("CHECKED FO A");
+            toSearch = Value.ACE;
+            bestHandToString+="- A ";
+            for(Card c : dummyHand){
+                if(c.getValue()== toSearch){
+                    System.out.println("CHECKED FO A");
+                    return c;
+                }
+
+            }
+        }
+
+        if(dummyCardCounter[11] >= 1){
+            toSearch = Value.KING;
+            bestHandToString+="- K ";
+            for(Card c : dummyHand){
+                if(c.getValue()== toSearch)
+                    return c;
+            }
+        }
+        if(dummyCardCounter[10] >= 1){
+            toSearch = Value.QUEEN;
+            bestHandToString+="- Q ";
+            for(Card c : dummyHand){
+                if(c.getValue()== toSearch)
+                    return c;
+            }
+        }
+        if(dummyCardCounter[9] >= 1){
+            toSearch = Value.JACK;
+            bestHandToString+="- J ";
+            for(Card c : dummyHand){
+                if(c.getValue()== toSearch)
+                    return c;
+            }
+        }
+        if(dummyCardCounter[8] >= 1){
+            toSearch = Value.TEN;
+            bestHandToString+="- 10 ";
+            for(Card c : dummyHand){
+                if(c.getValue()== toSearch)
+                    return c;
+            }
+        }
+        if(dummyCardCounter[7] >= 1){
+            toSearch = Value.NINE;
+            bestHandToString+="- 9 ";
+            for(Card c : dummyHand){
+                if(c.getValue()== toSearch)
+                    return c;
+            }
+        }
+        if(dummyCardCounter[6] >= 1){
+            toSearch = Value.EIGEHT;
+            bestHandToString+="- 8 ";
+            for(Card c : dummyHand){
+                if(c.getValue()== toSearch)
+                    return c;
+            }
+        }
+        if(dummyCardCounter[5] >= 1){
+            toSearch = Value.SEVEN;
+            bestHandToString+="- 7 ";
+            for(Card c : dummyHand){
+                if(c.getValue()== toSearch)
+                    return c;
+            }
+        }
+        if(dummyCardCounter[4] >= 1){
+            toSearch = Value.SIX;
+            bestHandToString+="- 6 ";
+            for(Card c : dummyHand){
+                if(c.getValue()== toSearch)
+                    return c;
+            }
+        }
+        if(dummyCardCounter[3] >= 1){
+            toSearch = Value.FIVE;
+            bestHandToString+="- 5 ";
+            for(Card c : dummyHand){
+                if(c.getValue()== toSearch)
+                    return c;
+            }
+        }
+        if(dummyCardCounter[2] >= 1){
+            toSearch = Value.FOUR;
+            bestHandToString+="- 4 ";
+            for(Card c : dummyHand){
+                if(c.getValue()== toSearch)
+                    return c;
+            }
+        }
+        if(dummyCardCounter[1] >= 1){
+            toSearch = Value.THREE;
+            bestHandToString+="- 3 ";
+            for(Card c : dummyHand){
+                if(c.getValue()== toSearch)
+                    return c;
+            }
+        }
+        if(dummyCardCounter[0] >= 1){
+            toSearch = Value.TWO;
+            bestHandToString+="- 2 ";
+            for(Card c : dummyHand){
+                if(c.getValue()== toSearch)
+                    return c;
+            }
+        }
         return null;
     }
 
-
     private boolean isRoyalFlush() {
+        //TODO this is buggy - can get royal without real royal
         if (straightFlush && straightValue == Value.ACE) {
-            System.out.println("OMG A ROYAL FLUSH");
+            System.out.println("IT IS ROYAL");
             return true;
         }
         return false;
     }
 
+    //TODO this is buggy - can get royal without real royal
     private boolean isStraightFlush() {
-        if (straight && flush) {
-            System.out.println("SO SICK! " + straightValue + " - STRAIGHT FLUSH");
-            return true;
-        } else
-            return false;
+        return straight && flush;
     }
 
     private boolean isQuads() {
-        for (int i = 0; i < cardCounter.length; i++) {
-            if (cardCounter[i] == 4) {
-                System.out.println("QUADS");
+        for (int aCardCounter : cardCounter) {
+            if (aCardCounter == 4) {
                 return true;
             }
         }
@@ -206,11 +358,9 @@ public class Hand {
 
     }
 
+    //TODO buggy - 2x trips wird nich als full house erkannt
     private boolean isFullHouse() {
-        if (trips && pair) {
-            return true;
-        }
-        return false;
+        return trips && pair;
     }
 
     private boolean isFlush() {
@@ -219,7 +369,7 @@ public class Hand {
         flushCounter = new int[4];
 
         //count the colours
-        for (Card c : sortedHand) {
+        for (Card c : hand) {
             switch (c.getColour()) {
                 case HEARTS:
                     flushCounter[0] += 1;
@@ -240,19 +390,15 @@ public class Hand {
         }
         //check if one colour is more than 5 times in the hand
         if (flushCounter[0] >= 5) {
-            System.out.println("HEARTH FLUSH");
             colourOfFlush = Colour.HEARTS;
             return true;
         } else if (flushCounter[1] >= 5) {
-            System.out.println("DIAMONDS FLUSH");
             colourOfFlush = Colour.DIAMOND;
             return true;
         } else if (flushCounter[2] >= 5) {
-            System.out.println("SPADE FLUSH");
             colourOfFlush = Colour.SPADE;
             return true;
         } else if (flushCounter[3] >= 5) {
-            System.out.println("CLUBS FLUSH");
             colourOfFlush = Colour.CLUBS;
             return true;
         } else {
@@ -264,73 +410,56 @@ public class Hand {
     }
 
     private boolean isStraight() {
-        //check for straight
-        int[] dummyCounter = cardCounter;
-        for (int i = 0; i < dummyCounter.length; i++) {
-            if (dummyCounter[i] == 2 || dummyCounter[i] == 3 || dummyCounter[i] == 4) {
-                dummyCounter[i] = 1;
-            }
+
+        if (cardCounter[8] >= 1 && cardCounter[9] >= 1 && cardCounter[10] >= 1 && cardCounter[11] >= 1 && cardCounter[12] >= 1) {
+            straightValue = Value.ACE;
+            return true;
+        }
+        if (cardCounter[7] >= 1 && cardCounter[8] >= 1 && cardCounter[9] >= 1 && cardCounter[10] >= 1 && cardCounter[11] >= 1) {
+            straightValue = Value.KING;
+            return true;
+        }
+        if (cardCounter[6] >= 1 && cardCounter[7] >= 1 && cardCounter[8] >= 1 && cardCounter[9] >= 1 && cardCounter[10] >= 1) {
+            straightValue = Value.QUEEN;
+            return true;
+        }
+        if (cardCounter[5] >= 1 && cardCounter[6] >= 1 && cardCounter[7] >= 1 && cardCounter[8] >= 1 && cardCounter[9] >= 1) {
+            straightValue = Value.JACK;
+            return true;
+        }
+        if (cardCounter[4] >= 1 && cardCounter[5] >= 1 && cardCounter[6] >= 1 && cardCounter[7] >= 1 && cardCounter[8] >= 1) {
+            straightValue = Value.TEN;
+            return true;
+        }
+        if (cardCounter[3] >= 1 && cardCounter[4] >= 1 && cardCounter[5] >= 1 && cardCounter[6] >= 1 && cardCounter[7] >= 1) {
+            straightValue = Value.NINE;
+            return true;
+        }
+        if (cardCounter[2] >= 1 && cardCounter[3] >= 1 && cardCounter[4] >= 1 && cardCounter[5] >= 1 && cardCounter[6] >= 1) {
+            straightValue = Value.EIGEHT;
+            return true;
+        }
+        if (cardCounter[1] >= 1 && cardCounter[2] >= 1 && cardCounter[3] >= 1 && cardCounter[4] >= 1 && cardCounter[5] >= 1) {
+            straightValue = Value.SEVEN;
+            return true;
+        }
+        if (cardCounter[0] >= 1 && cardCounter[1] >= 1 && cardCounter[2] >= 1 && cardCounter[3] >= 1 && cardCounter[4] >= 1) {
+            straightValue = Value.SIX;
+            return true;
+        }
+        if (cardCounter[12] >= 1 && cardCounter[0] >= 1 && cardCounter[1] >= 1 && cardCounter[2] >= 1 && cardCounter[3] >= 1) {
+            straightValue = Value.FIVE;
+            return true;
         }
 
-        if (dummyCounter[12] == 1 && dummyCounter[0] == 1 && dummyCounter[1] == 1 && dummyCounter[2] == 1 && dummyCounter[3] == 1) {
-            straightValue = Value.FIVE;
-            System.out.println("5- straight");
-            return true;
-        }
-        if (dummyCounter[0] == 1 && dummyCounter[1] == 1 && dummyCounter[2] == 1 && dummyCounter[3] == 1 && dummyCounter[4] == 1) {
-            straightValue = Value.SIX;
-            System.out.println("6- straight");
-            return true;
-        }
-        if (dummyCounter[1] == 1 && dummyCounter[2] == 1 && dummyCounter[3] == 1 && dummyCounter[4] == 1 && dummyCounter[5] == 1) {
-            straightValue = Value.SEVEN;
-            System.out.println("7- straight");
-            return true;
-        }
-        if (dummyCounter[2] == 1 && dummyCounter[3] == 1 && dummyCounter[4] == 1 && dummyCounter[5] == 1 && dummyCounter[6] == 1) {
-            straightValue = Value.EIGEHT;
-            System.out.println("8- straight");
-            return true;
-        }
-        if (dummyCounter[3] == 1 && dummyCounter[4] == 1 && dummyCounter[5] == 1 && dummyCounter[6] == 1 && dummyCounter[7] == 1) {
-            straightValue = Value.NINE;
-            System.out.println("9 straight");
-            return true;
-        }
-        if (dummyCounter[4] == 1 && dummyCounter[5] == 1 && dummyCounter[6] == 1 && dummyCounter[7] == 1 && dummyCounter[8] == 1) {
-            straightValue = Value.TEN;
-            System.out.println("10 straight");
-            return true;
-        }
-        if (dummyCounter[5] == 1 && dummyCounter[6] == 1 && dummyCounter[7] == 1 && dummyCounter[8] == 1 && dummyCounter[9] == 1) {
-            straightValue = Value.JACK;
-            System.out.println("J- straight");
-            return true;
-        }
-        if (dummyCounter[6] == 1 && dummyCounter[7] == 1 && dummyCounter[8] == 1 && dummyCounter[9] == 1 && dummyCounter[10] == 1) {
-            straightValue = Value.QUEEN;
-            System.out.println("Q- straight");
-            return true;
-        }
-        if (dummyCounter[7] == 1 && dummyCounter[8] == 1 && dummyCounter[9] == 1 && dummyCounter[10] == 1 && dummyCounter[11] == 1) {
-            straightValue = Value.KING;
-            System.out.println("K- straight");
-            return true;
-        }
-        if (dummyCounter[8] == 1 && dummyCounter[9] == 1 && dummyCounter[10] == 1 && dummyCounter[11] == 1 && dummyCounter[12] == 1) {
-            straightValue = Value.ACE;
-            System.out.println("A- straight");
-            return true;
-        }
         return false;
 
     }
 
     private boolean isTrips() {
 
-        for (int i = 0; i < cardCounter.length; i++) {
-            if (cardCounter[i] == 3) {
-                System.out.println("TRIPS!!!");
+        for (int aCardCounter : cardCounter) {
+            if (aCardCounter == 3) {
                 return true;
             }
         }
@@ -342,38 +471,20 @@ public class Hand {
     }
 
     private boolean isPair() {
-       return pair;
-    }
-
-    private void countPairs() {
-        twoPair = false;
-        pair = false;
-        pairCounter = 0;
-
-        for (int i = 0; i < cardCounter.length; i++) {
-
-            if (cardCounter[i] == 2) {
-                pair = true;
-                pairCounter++;
-            }
-        }
-        if (pairCounter > 1) {
-            twoPair = true;
-        }
+        return pair;
     }
 
     private boolean isHighCard() {
         if (!straightFlush && !royalFlush && !quads && !fullHouse && !flush && !straight && !trips && !twoPair && !pair) {
-            System.out.println("HIGH CARD WOHOO");
             return true;
         } else
             return false;
     }
 
 
-    public ArrayList<Card> getSortedHand() {
-        Collections.sort(sortedHand);
+    public ArrayList<Card> getSortedHand(ArrayList<Card> hand) {
+        Collections.sort(hand);
 
-        return sortedHand;
+        return hand;
     }
 }

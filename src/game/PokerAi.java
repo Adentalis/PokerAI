@@ -11,27 +11,30 @@ import java.util.ArrayList;
 
 
 public class PokerAi {
+    private static final boolean HANDTEST_GAMEMODE = true;
     public static void main(String[] args)
 
     {
         System.out.println("--> PokerAI <--");
-        //Game game = new Game();
-        MainBoard mainBoard = new MainBoard();
 
-        ArrayList<Card> hand_array = createNewHand();
+        if (HANDTEST_GAMEMODE){
+            HandTestGui handTestGui = new HandTestGui();
+        }else {
 
-        Hand hand = new Hand(hand_array);
-        mainBoard.update7Cards(hand);
+            //Game game = new Game();
+            Hand hand = new Hand(createNewHand());
+            MainBoard mainBoard = new MainBoard();
+
+            mainBoard.update7Cards(hand);
 
         /*open the sortedCards Gui
         ArrayList<Card> sortedHand_array = hand.getSortedHand();
         board.showHandOnGui(sortedHand_array);
         */
 
-        HandTestGui handTestGui = new HandTestGui(mainBoard);
 
-        hand.validateHand();
-
+            hand.validateHand();
+        }
 
     }
 
