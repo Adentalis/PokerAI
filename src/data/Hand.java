@@ -2,6 +2,7 @@ package data;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Iterator;
 
 public class Hand {
     private long value;
@@ -9,6 +10,7 @@ public class Hand {
     public ArrayList<Card> hand;
     public ArrayList<Card> sortedHand;
     public ArrayList<Card> bestHand;
+    //dummy hand is a copy of normal hand in validate function. Cards will be removed from it and put to bestHand
     public ArrayList<Card> dummyHand;
 
     private Colour colourOfFlush;
@@ -43,6 +45,7 @@ public class Hand {
     public void validateHand() {
         bestHandToString = "";
         dummyHand= hand;
+        value = 0L;
         cardCounter = countCards(this.hand);
 
         countCards(this.hand);
@@ -84,9 +87,8 @@ public class Hand {
         if (highCard)
             return createHighCard();
 
-        System.out.println("THIS SOULD NEVER HAPPEN - Hand createBestHand default");
+        System.out.println("THIS SHOULD NEVER HAPPEN - Hand createBestHand default");
         return bestHand;
-
     }
 
     private int[] countCards(ArrayList<Card> handOvergiven) {
@@ -168,52 +170,79 @@ public class Hand {
 
     private ArrayList<Card> createStriaghtFlush() {
         bestHandToString += "Straight Flush - ";
+        value = 90000000000L;
         return null;
     }
 
     private ArrayList<Card> createQuads() {
         bestHandToString += "Quads - ";
+        value = 80000000000L;
         return null;
     }
 
     private ArrayList<Card> createFullHouse() {
         bestHandToString += "Full House - ";
+        value = 70000000000L;
         return null;
     }
 
     private ArrayList<Card> createFlush() {
-        bestHandToString += "Flush - ";
+        bestHandToString += "Flush ";
+        value = 60000000000L;
+
+        dummyHand.removeIf(c -> c.getColour() != colourOfFlush);
+
+        for(int i = 0 ; i < 5 ; i ++) {
+            Card choosen = getHighcardOfHand();
+            bestHand.add(choosen);
+            dummyHand.remove(choosen);
+        }
+        value+= 100000000* getIntOutOfValue(bestHand.get(0).getValue());
+        value+= 1000000* getIntOutOfValue(bestHand.get(1).getValue());
+        value+= 10000* getIntOutOfValue(bestHand.get(2).getValue());
+        value+= 100* getIntOutOfValue(bestHand.get(3).getValue());
+        value+= 1* getIntOutOfValue(bestHand.get(4).getValue());
+
+        System.out.println("value = "+value);
         return null;
     }
 
     private ArrayList<Card> createStraight() {
         bestHandToString += "Straight - ";
+        value = 50000000000L;
+
         return null;
     }
 
     private ArrayList<Card> createTrips() {
         bestHandToString += "Trips - ";
+        value = 40000000000L;
+
         return null;
     }
 
     private ArrayList<Card> createTwoPair() {
         bestHandToString += "Two Pair - ";
+        value = 30000000000L;
         return null;
     }
 
     private ArrayList<Card> createPair() {
         bestHandToString += "Pair ";
+        value = 20000000000L;
         return null;
     }
 
     private ArrayList<Card> createHighCard() {
         bestHandToString += "Highcard ";
+        value = 10000000000L;
+        //get 5x Times the highest valued card and remove it from dummy
         for(int i = 0 ; i < 5 ; i ++) {
             Card choosen = getHighcardOfHand();
             bestHand.add(choosen);
             dummyHand.remove(choosen);
-
         }
+
         System.out.println(bestHandToString);
         return bestHand;
     }
@@ -223,12 +252,10 @@ public class Hand {
         int [] dummyCardCounter = countCards(dummyHand);
         Value toSearch;
         if(dummyCardCounter[12] >= 1){
-            System.out.println("CHECKED FO A");
             toSearch = Value.ACE;
             bestHandToString+="- A ";
             for(Card c : dummyHand){
                 if(c.getValue()== toSearch){
-                    System.out.println("CHECKED FO A");
                     return c;
                 }
 
@@ -480,7 +507,38 @@ public class Hand {
         } else
             return false;
     }
-
+    private int getIntOutOfValue(Value v){
+        switch (v){
+            case ACE:
+                return 14;
+            case KING:
+                return 13;
+            case QUEEN:
+                return 12;
+            case JACK:
+                return 11;
+            case TEN:
+                return 10;
+            case NINE:
+                return 9;
+            case EIGEHT:
+                return 8;
+            case SEVEN:
+                return 7;
+            case SIX:
+                return 6;
+            case FIVE:
+                return 5;
+            case FOUR:
+                return 4;
+            case THREE:
+                return 3;
+            case TWO:
+                return 2;
+            default :
+                return 0;
+        }
+    }
 
     public ArrayList<Card> getSortedHand(ArrayList<Card> hand) {
         Collections.sort(hand);

@@ -29,7 +29,8 @@ public class HandTestGui implements ActionListener, KeyListener {
 
         jframe.setSize(1850, 800);
         Dimension dimension = Toolkit.getDefaultToolkit().getScreenSize();
-        jframe.setLocation((dimension.width / 2 - this.jframe.getSize().width / 2) + 1900, (dimension.height / 2 - this.jframe.getSize().height / 2) - 110);
+        //jframe.setLocation((dimension.width / 2 - this.jframe.getSize().width / 2) + 1900, (dimension.height / 2 - this.jframe.getSize().height / 2) - 110);
+        jframe.setLocation((dimension.width / 2 - this.jframe.getSize().width / 2) - 2700, (dimension.height / 2 - this.jframe.getSize().height / 2) - 110);
         jframe.setDefaultCloseOperation(3);
         jframe.setFocusable(true);
 
