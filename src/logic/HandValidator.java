@@ -1,4 +1,4 @@
 package logic;
 
-public  class HandValidator {
+public class HandValidator {
 }

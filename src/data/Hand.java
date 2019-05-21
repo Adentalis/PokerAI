@@ -11,10 +11,11 @@ public class Hand {
     public ArrayList<Card> sortedHand;
     public ArrayList<Card> bestHand;
     //dummy hand is a copy of normal hand in validate function. Cards will be removed from it and put to bestHand
-    public ArrayList<Card> dummyHand;
+    private ArrayList<Card> dummyHand;
 
     private Colour colourOfFlush;
     private Value straightValue;
+    private Value quadsValue;
 
     private int[] flushCounter;
 
@@ -47,9 +48,8 @@ public class Hand {
         dummyHand= hand;
         value = 0L;
         cardCounter = countCards(this.hand);
-
-        countCards(this.hand);
         countPairs();
+
         quads = isQuads();
         trips = isTrips();
         twoPair = isTwoPair();
@@ -60,35 +60,37 @@ public class Hand {
         straightFlush = isStraightFlush();
         royalFlush = isRoyalFlush();
         highCard  = isHighCard();
-        this.bestHand = getBestHand();
-        System.out.println(bestHandToString);
+        createBestHand();
+
+        System.out.println(bestHandToString +" --  value = "+value);
         System.out.println("--------------");
+
     }
 
-    public ArrayList<Card> getBestHand() {
+    public void createBestHand() {
         if (royalFlush)
-            return createRoyalFlush();
-        if (straightFlush)
-            return createStriaghtFlush();
-        if (quads)
-            return createQuads();
-        if (fullHouse)
-            return createFullHouse();
-        if (flush)
-            return createFlush();
-        if (straight)
-            return createStraight();
-        if (trips)
-            return createTrips();
-        if (twoPair)
-            return createTwoPair();
-        if (pair)
-            return createPair();
-        if (highCard)
-            return createHighCard();
+            createRoyalFlush();
+        else if(straightFlush)
+            createStriaghtFlush();
+        else if (quads)
+            createQuads();
+        else if (fullHouse)
+            createFullHouse();
+        else if (flush)
+            createFlush();
+        else if (straight)
+            createStraight();
+        else if (trips)
+            createTrips();
+        else if (twoPair)
+            createTwoPair();
+        else if (pair)
+            createPair();
+        else if (highCard)
+            createHighCard();
+        else
+            System.out.println("THIS SHOULD NEVER HAPPEN - Hand createBestHand default");
 
-        System.out.println("THIS SHOULD NEVER HAPPEN - Hand createBestHand default");
-        return bestHand;
     }
 
     private int[] countCards(ArrayList<Card> handOvergiven) {
@@ -160,33 +162,48 @@ public class Hand {
         }
     }
 
-    private ArrayList<Card> createRoyalFlush() {
-        bestHandToString += "Royal Flush - ";
 
+    private void createRoyalFlush() {
+        bestHandToString += "Royal Flush - A - K - Q - J - 10";
         value = 99999999999L;
-        System.out.println(value);
-        return null;
+
     }
 
-    private ArrayList<Card> createStriaghtFlush() {
+    private void createStriaghtFlush() {
         bestHandToString += "Straight Flush - ";
         value = 90000000000L;
-        return null;
+
     }
 
-    private ArrayList<Card> createQuads() {
-        bestHandToString += "Quads - ";
+    private void createQuads() {
+        bestHandToString += "Quads";
+
+        for(Card c : dummyHand ){
+            if (c.getValue()== quadsValue){
+                bestHand.add(c);
+                bestHandToString+= " - " + getIntOutOfValue(quadsValue);
+            }
+        }
+        System.out.println(bestHand.size());
+        dummyHand.removeIf(c -> c.getValue() != quadsValue);
+
+        Card bestOfTheRest =getHighcardOfHand();
+        dummyHand.remove(bestOfTheRest);
+        bestHand.add(bestOfTheRest);
+        System.out.println(bestHand.size());
         value = 80000000000L;
-        return null;
+        value += calculateValue(getIntOutOfValue(quadsValue),1);
+        value += calculateValue(getIntOutOfValue(bestOfTheRest.getValue()),2);
+
     }
 
-    private ArrayList<Card> createFullHouse() {
+    private void createFullHouse() {
         bestHandToString += "Full House - ";
         value = 70000000000L;
-        return null;
+
     }
 
-    private ArrayList<Card> createFlush() {
+    private void createFlush() {
         bestHandToString += "Flush ";
         value = 60000000000L;
 
@@ -196,56 +213,52 @@ public class Hand {
             Card choosen = getHighcardOfHand();
             bestHand.add(choosen);
             dummyHand.remove(choosen);
+            value += calculateValue(getIntOutOfValue(choosen.getValue()), i + 1);
         }
-        value+= 100000000* getIntOutOfValue(bestHand.get(0).getValue());
-        value+= 1000000* getIntOutOfValue(bestHand.get(1).getValue());
-        value+= 10000* getIntOutOfValue(bestHand.get(2).getValue());
-        value+= 100* getIntOutOfValue(bestHand.get(3).getValue());
-        value+= 1* getIntOutOfValue(bestHand.get(4).getValue());
 
-        System.out.println("value = "+value);
-        return null;
     }
 
-    private ArrayList<Card> createStraight() {
+    private void createStraight() {
         bestHandToString += "Straight - ";
         value = 50000000000L;
 
-        return null;
+
     }
 
-    private ArrayList<Card> createTrips() {
+    private void createTrips() {
         bestHandToString += "Trips - ";
         value = 40000000000L;
 
-        return null;
     }
 
-    private ArrayList<Card> createTwoPair() {
+    private void createTwoPair() {
         bestHandToString += "Two Pair - ";
         value = 30000000000L;
-        return null;
     }
 
-    private ArrayList<Card> createPair() {
+    private void createPair() {
         bestHandToString += "Pair ";
         value = 20000000000L;
-        return null;
     }
 
-    private ArrayList<Card> createHighCard() {
+    private void createHighCard() {
         bestHandToString += "Highcard ";
         value = 10000000000L;
+
         //get 5x Times the highest valued card and remove it from dummy
-        for(int i = 0 ; i < 5 ; i ++) {
+        for(int i = 0 ; i < 5   ; i ++) {
+
+            if(dummyHand.size() == 0)
+                break;
+
             Card choosen = getHighcardOfHand();
             bestHand.add(choosen);
             dummyHand.remove(choosen);
+            value += calculateValue(getIntOutOfValue(choosen.getValue()), i + 1);
         }
 
-        System.out.println(bestHandToString);
-        return bestHand;
     }
+
 
     //looks in dummy for the highest valued card
     private Card getHighcardOfHand(){
@@ -376,13 +389,13 @@ public class Hand {
     }
 
     private boolean isQuads() {
-        for (int aCardCounter : cardCounter) {
-            if (aCardCounter == 4) {
+        for(int i = cardCounter.length-1 ; i >= 0 ; i--){
+            if(cardCounter[i]== 4){
+                quadsValue = getValueOutOfInt(i);
                 return true;
             }
         }
         return false;
-
     }
 
     //TODO buggy - 2x trips wird nich als full house erkannt
@@ -502,11 +515,9 @@ public class Hand {
     }
 
     private boolean isHighCard() {
-        if (!straightFlush && !royalFlush && !quads && !fullHouse && !flush && !straight && !trips && !twoPair && !pair) {
-            return true;
-        } else
-            return false;
+        return !straightFlush && !royalFlush && !quads && !fullHouse && !flush && !straight && !trips && !twoPair && !pair;
     }
+
     private int getIntOutOfValue(Value v){
         switch (v){
             case ACE:
@@ -538,6 +549,69 @@ public class Hand {
             default :
                 return 0;
         }
+    }
+
+    private Value getValueOutOfInt(int i){
+        switch (i){
+            case 0:
+                return Value.TWO;
+            case 1:
+                return Value.THREE;
+            case 2:
+                return Value.FOUR;
+            case 3:
+                return Value.FIVE;
+            case 4:
+                return Value.SIX;
+            case 5:
+                return Value.SEVEN;
+            case 6:
+                return Value.EIGEHT;
+            case 7:
+                return Value.NINE;
+            case 8:
+                return Value.TEN;
+            case 9:
+                return Value.JACK;
+            case 10:
+                return Value.QUEEN;
+            case 11:
+                return Value.KING;
+            case 12:
+                return Value.ACE;
+            default :
+                return Value.TWO;
+        }
+    }
+
+    //position at format X X X X X
+    private int calculateValue(int v, int position){
+        int exponent;
+        switch (position){
+            case 1:
+                exponent = 8;
+                break;
+            case 2:
+                exponent = 6;
+                break;
+            case 3:
+                exponent = 4;
+                break;
+            case 4:
+                exponent = 2;
+                break;
+            case 5:
+                exponent = 0;
+                break;
+            default:
+                System.out.println("THIS SHOULD NEVER HAPPEN - calculateValue() in Hand-(Validator)");
+                exponent = 0;
+                break;
+        }
+
+
+        return v * (int)Math.pow(10, exponent);
+
     }
 
     public ArrayList<Card> getSortedHand(ArrayList<Card> hand) {
