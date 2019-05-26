@@ -359,7 +359,11 @@ public class HandTestGui implements ActionListener, KeyListener {
         }
         Hand hand = new Hand(hand_array);
 
+        ArrayList<Card> bestHand = hand.bestHand;
 
+        for(Card c : bestHand){
+            System.out.println(c.toString());
+        }
 
 
     }
@@ -375,6 +379,8 @@ public class HandTestGui implements ActionListener, KeyListener {
        // mainBoard.update7Cards(hand);
         //mainBoard.showHandOnGui(hand_array);
         hand.validateHand();
+
+
        // ArrayList<Card> best = hand.getBestHand();
        // mainBoard.showHandOnGui(best);
 

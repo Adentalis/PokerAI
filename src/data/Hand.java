@@ -18,6 +18,7 @@ public class Hand {
     private Value bestTripsValue;
 
     private int[] flushCounter;
+    private ArrayList<Value> aPairsValue;
 
     private int[] cardCounter;
     private int pairCounter;
@@ -62,12 +63,12 @@ public class Hand {
         highCard  = isHighCard();
         createBestHand();
 
-        System.out.println(bestHandToString +" --  value = "+value);
+        System.out.println(bestHandToString +" --  value = "+valueToString());
         System.out.println("--------------");
 
     }
 
-    public void createBestHand() {
+    private void createBestHand() {
         if (royalFlush)
             createRoyalFlush();
         else if(straightFlush)
@@ -150,16 +151,20 @@ public class Hand {
         twoPair = false;
         pair = false;
         pairCounter = 0;
-        for (int aCardCounter : cardCounter) {
+        aPairsValue = new ArrayList<>();
 
-            if (aCardCounter == 2) {
+        for(int i = cardCounter.length-1 ; i >= 0 ; i--){
+            if(cardCounter[i]== 2){
+                aPairsValue.add(getValueOutOfInt(i));
                 pair = true;
                 pairCounter++;
             }
         }
+
         if (pairCounter > 1) {
             twoPair = true;
         }
+
     }
 
 
@@ -182,10 +187,8 @@ public class Hand {
         for(Card c : dummyHand ){
             if (c.getValue()== quadsValue){
                 bestHand.add(c);
-
             }
         }
-
         dummyHand.removeIf(c -> c.getValue() == quadsValue);
 
         value = 80000000000L;
@@ -196,7 +199,9 @@ public class Hand {
             Card bestOfTheRest =getHighcardOfHand();
             dummyHand.remove(bestOfTheRest);
             bestHand.add(bestOfTheRest);
-            value += calculateValue(getIntOutOfValue(bestOfTheRest.getValue()),2);
+            if (bestOfTheRest != null) {
+                value += calculateValue(getIntOutOfValue(bestOfTheRest.getValue()),2);
+            }
         }
 
 
@@ -218,14 +223,38 @@ public class Hand {
             Card choosen = getHighcardOfHand();
             bestHand.add(choosen);
             dummyHand.remove(choosen);
-            value += calculateValue(getIntOutOfValue(choosen.getValue()), i + 1);
+            if (choosen != null) {
+                value += calculateValue(getIntOutOfValue(choosen.getValue()), i + 1);
+            }
         }
 
     }
 
     private void createStraight() {
-        bestHandToString += "Straight - ";
+        bestHandToString += "Straight - "+ straightValue;
         value = 50000000000L;
+        value += calculateValue(getIntOutOfValue(straightValue), 1);
+
+        //loop 5 times
+        for (int i = straightValue.ordinal() ; i> straightValue.ordinal()-5; i--){
+            int position = 1;
+            for(Card c : dummyHand){
+                if (c.getValue().ordinal() == i){
+                    bestHand.add(c);
+                    break;
+                }
+            }
+        }//end 5loop
+
+        if(straightValue == Value.FIVE){
+            for(Card c : dummyHand){
+                if (c.getValue() == Value.ACE){
+                    bestHand.add(c);
+                    break;
+                }
+            }
+        }
+
 
 
     }
@@ -243,9 +272,7 @@ public class Hand {
         }
         dummyHand.removeIf(c -> c.getValue() == bestTripsValue);
 
-
         for(int i = 1 ; i < 3   ; i ++) {
-
             if(dummyHand.size() == 0)
                 break;
 
@@ -258,13 +285,61 @@ public class Hand {
     }
 
     private void createTwoPair() {
-        bestHandToString += "Two Pair - ";
+        bestHandToString += "Two Pair - "+aPairsValue.get(0) + " - "+aPairsValue.get(1);
         value = 30000000000L;
+
+        //add the first pair  to bestHand and remove them from dummyHand
+        for(Card c : dummyHand){
+            if (c.getValue() == aPairsValue.get(0)){
+                bestHand.add(c);
+            }
+        }
+        value += calculateValue(getIntOutOfValue(aPairsValue.get(0)), 1);
+        dummyHand.removeIf(c -> c.getValue() == aPairsValue.get(0));
+
+        //add the second pair to bestHand and remove them from dummyHand
+        for(Card c : dummyHand){
+            if (c.getValue() == aPairsValue.get(1)){
+                bestHand.add(c);
+            }
+        }
+        value += calculateValue(getIntOutOfValue(aPairsValue.get(1)), 2);
+        dummyHand.removeIf(c -> c.getValue() == aPairsValue.get(1));
+
+        //add the last card
+        if(dummyHand.size() != 0){
+            Card choosen = getHighcardOfHand();
+            bestHand.add(choosen);
+            dummyHand.remove(choosen);
+            value += calculateValue(getIntOutOfValue(choosen.getValue()), 3);
+        }
+
+
     }
 
     private void createPair() {
-        bestHandToString += "Pair ";
+        bestHandToString += "Pair - "+aPairsValue.get(0);
         value = 20000000000L;
+        value += calculateValue(getIntOutOfValue(aPairsValue.get(0)), 1);
+
+        //add the two cards to bestHand and remove them from dummyHand
+        for(Card c : dummyHand){
+            if (c.getValue() == aPairsValue.get(0)){
+                bestHand.add(c);
+            }
+        }
+        dummyHand.removeIf(c -> c.getValue() == aPairsValue.get(0));
+
+        //get the other 3 cards
+        for(int i = 1 ; i < 4   ; i ++) {
+            if(dummyHand.size() == 0)
+                break;
+            Card choosen = getHighcardOfHand();
+            bestHand.add(choosen);
+            dummyHand.remove(choosen);
+            value += calculateValue(getIntOutOfValue(choosen.getValue()), i + 1);
+        }
+
     }
 
     private void createHighCard() {
@@ -294,9 +369,8 @@ public class Hand {
             toSearch = Value.ACE;
             bestHandToString+="- A ";
             for(Card c : dummyHand){
-                if(c.getValue()== toSearch){
+                if(c.getValue()== toSearch)
                     return c;
-                }
 
             }
         }
@@ -645,5 +719,25 @@ public class Hand {
         Collections.sort(hand);
 
         return hand;
+    }
+
+    private String valueToString(){
+
+        String x = String.valueOf(value);
+        x = addChar(x,'|',1);
+        x = addChar(x,'-',10);
+        x = addChar(x,'-',8);
+        x = addChar(x,'-',6);
+        x = addChar(x,'-',4);
+        return x;
+    }
+
+    private String addChar(String str, char ch, int position) {
+        int len = str.length();
+        char[] updatedArr = new char[len + 1];
+        str.getChars(0, position, updatedArr, 0);
+        updatedArr[position] = ch;
+        str.getChars(position, len, updatedArr, position + 1);
+        return new String(updatedArr);
     }
 }
