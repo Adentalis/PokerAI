@@ -19,6 +19,7 @@ public class Hand {
 
     private int[] flushCounter;
     private ArrayList<Value> aPairsValue;
+    private ArrayList<Value> aTripsValue;
 
     private int[] cardCounter;
     private int pairCounter;
@@ -62,9 +63,9 @@ public class Hand {
         royalFlush = isRoyalFlush();
         highCard  = isHighCard();
         createBestHand();
-
-        System.out.println(bestHandToString +" --  value = "+valueToString());
         System.out.println("--------------");
+        System.out.println(bestHandToString +" --  value = "+valueToString());
+
 
     }
 
@@ -208,9 +209,45 @@ public class Hand {
     }
 
     private void createFullHouse() {
-        bestHandToString += "Full House - ";
+        bestHandToString += "Full House - " + aTripsValue.get(0)+ " - ";
         value = 70000000000L;
 
+        //add the best trips to bestHand and remove them from dummyHand
+        for(Card c : dummyHand){
+            if (c.getValue() == aTripsValue.get(0)){
+                bestHand.add(c);
+            }
+        }
+        value += calculateValue(getIntOutOfValue(aTripsValue.get(0)), 1);
+        dummyHand.removeIf(c -> c.getValue() == aTripsValue.get(0));
+
+        //decide to add second trips or best pair
+        if(aTripsValue.size() <=  1 ){
+            System.out.println("IN ADD PAIR");
+            bestHandToString += aPairsValue.get(0);
+
+            for(Card c : dummyHand){
+                if (c.getValue() == aPairsValue.get(0)){
+                    bestHand.add(c);
+                }
+            }
+            value += calculateValue(getIntOutOfValue(aPairsValue.get(0)), 2);
+
+        }else{
+            //BUG - when testing with +7 cards there can be 2 trips and a bestPair - then you have normally to check wich one of them is bigger
+            bestHandToString += aTripsValue.get(1);
+            int counter = 0;
+            for(Card c : dummyHand){
+                if (c.getValue() == aTripsValue.get(1)){
+                    bestHand.add(c);
+                    counter++;
+                    if(counter == 2)
+                        break;
+                }
+            }
+            value += calculateValue(getIntOutOfValue(aTripsValue.get(1)), 2);
+
+        }//end of else
     }
 
     private void createFlush() {
@@ -485,7 +522,17 @@ public class Hand {
 
     //TODO this is buggy - can get royal without real royal
     private boolean isStraightFlush() {
-        return straight && flush;
+        if (!flush)
+            return false;
+        else{
+
+
+
+
+
+            return true;
+        }
+
     }
 
     private boolean isQuads() {
@@ -498,13 +545,11 @@ public class Hand {
         return false;
     }
 
-    //TODO buggy - 2x trips wird nich als full house erkannt
     private boolean isFullHouse() {
-        return trips && pair;
+        return trips && pair || aTripsValue.size() > 1;
     }
 
     private boolean isFlush() {
-        //TODO create deck of the flush - best hand
         //Heart - Diamond - Spade - Clubs
         flushCounter = new int[4];
 
@@ -597,15 +642,17 @@ public class Hand {
     }
 
     private boolean isTrips() {
-
+        aTripsValue = new ArrayList<>();
         for ( int i = cardCounter.length-1;i >= 0; i--){
-
-            if(cardCounter[i]== 3){
-                bestTripsValue = getValueOutOfInt(i);
-                return true;
-            }
-
+            if(cardCounter[i]== 3)
+                aTripsValue.add(getValueOutOfInt(i));
         }
+
+        if(aTripsValue.size()>= 1){
+            bestTripsValue = aTripsValue.get(0);
+            return true;
+        }
+
         return false;
 
     }
