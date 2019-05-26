@@ -395,7 +395,7 @@ public class HandTestGui implements ActionListener, KeyListener {
         if (i == 5)
             return new Card(Colour.HEARTS, Value.NINE);
         if (i == 6)
-            return new Card(Colour.HEARTS, Value.EIGEHT);
+            return new Card(Colour.HEARTS, Value.EIGHT);
         if (i == 7)
             return new Card(Colour.HEARTS, Value.SEVEN);
         if (i == 8)
@@ -422,7 +422,7 @@ public class HandTestGui implements ActionListener, KeyListener {
         if (i == 18)
             return new Card(Colour.DIAMOND, Value.NINE);
         if (i == 19)
-            return new Card(Colour.DIAMOND, Value.EIGEHT);
+            return new Card(Colour.DIAMOND, Value.EIGHT);
         if (i == 20)
             return new Card(Colour.DIAMOND, Value.SEVEN);
         if (i == 21)
@@ -449,7 +449,7 @@ public class HandTestGui implements ActionListener, KeyListener {
         if (i == 31)
             return new Card(Colour.CLUBS, Value.NINE);
         if (i == 32)
-            return new Card(Colour.CLUBS, Value.EIGEHT);
+            return new Card(Colour.CLUBS, Value.EIGHT);
         if (i == 33)
             return new Card(Colour.CLUBS, Value.SEVEN);
         if (i == 34)
@@ -476,7 +476,7 @@ public class HandTestGui implements ActionListener, KeyListener {
         if (i == 44)
             return new Card(Colour.SPADE, Value.NINE);
         if (i == 45)
-            return new Card(Colour.SPADE, Value.EIGEHT);
+            return new Card(Colour.SPADE, Value.EIGHT);
         if (i == 46)
             return new Card(Colour.SPADE, Value.SEVEN);
         if (i == 47)

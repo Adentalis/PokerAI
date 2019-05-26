@@ -2,7 +2,6 @@ package data;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Iterator;
 
 public class Hand {
     private long value;
@@ -16,6 +15,7 @@ public class Hand {
     private Colour colourOfFlush;
     private Value straightValue;
     private Value quadsValue;
+    private Value bestTripsValue;
 
     private int[] flushCounter;
 
@@ -116,7 +116,7 @@ public class Hand {
                 case SEVEN:
                     cardCounterX[5] += 1;
                     break;
-                case EIGEHT:
+                case EIGHT:
                     cardCounterX[6] += 1;
                     break;
                 case NINE:
@@ -196,7 +196,6 @@ public class Hand {
             Card bestOfTheRest =getHighcardOfHand();
             dummyHand.remove(bestOfTheRest);
             bestHand.add(bestOfTheRest);
-            System.out.println("now calc  "+ calculateValue(getIntOutOfValue(bestOfTheRest.getValue()),2));
             value += calculateValue(getIntOutOfValue(bestOfTheRest.getValue()),2);
         }
 
@@ -232,8 +231,29 @@ public class Hand {
     }
 
     private void createTrips() {
-        bestHandToString += "Trips - ";
+        bestHandToString += "Trips - "+ bestTripsValue;
         value = 40000000000L;
+        value += calculateValue(getIntOutOfValue(bestTripsValue), 1);
+
+        //add the tree cards to best hand
+        for(Card c : dummyHand ){
+            if (c.getValue()== bestTripsValue){
+                bestHand.add(c);
+            }
+        }
+        dummyHand.removeIf(c -> c.getValue() == bestTripsValue);
+
+
+        for(int i = 1 ; i < 3   ; i ++) {
+
+            if(dummyHand.size() == 0)
+                break;
+
+            Card choosen = getHighcardOfHand();
+            bestHand.add(choosen);
+            dummyHand.remove(choosen);
+            value += calculateValue(getIntOutOfValue(choosen.getValue()), i + 1);
+        }
 
     }
 
@@ -322,7 +342,7 @@ public class Hand {
             }
         }
         if(dummyCardCounter[6] >= 1){
-            toSearch = Value.EIGEHT;
+            toSearch = Value.EIGHT;
             bestHandToString+="- 8 ";
             for(Card c : dummyHand){
                 if(c.getValue()== toSearch)
@@ -482,7 +502,7 @@ public class Hand {
             return true;
         }
         if (cardCounter[2] >= 1 && cardCounter[3] >= 1 && cardCounter[4] >= 1 && cardCounter[5] >= 1 && cardCounter[6] >= 1) {
-            straightValue = Value.EIGEHT;
+            straightValue = Value.EIGHT;
             return true;
         }
         if (cardCounter[1] >= 1 && cardCounter[2] >= 1 && cardCounter[3] >= 1 && cardCounter[4] >= 1 && cardCounter[5] >= 1) {
@@ -504,12 +524,16 @@ public class Hand {
 
     private boolean isTrips() {
 
-        for (int aCardCounter : cardCounter) {
-            if (aCardCounter == 3) {
+        for ( int i = cardCounter.length-1;i >= 0; i--){
+
+            if(cardCounter[i]== 3){
+                bestTripsValue = getValueOutOfInt(i);
                 return true;
             }
+
         }
         return false;
+
     }
 
     private boolean isTwoPair() {
@@ -538,7 +562,7 @@ public class Hand {
                 return 10;
             case NINE:
                 return 9;
-            case EIGEHT:
+            case EIGHT:
                 return 8;
             case SEVEN:
                 return 7;
@@ -572,7 +596,7 @@ public class Hand {
             case 5:
                 return Value.SEVEN;
             case 6:
-                return Value.EIGEHT;
+                return Value.EIGHT;
             case 7:
                 return Value.NINE;
             case 8:
@@ -614,10 +638,7 @@ public class Hand {
                 exponent = 0;
                 break;
         }
-
-
         return v * (int)Math.pow(10, exponent);
-
     }
 
     public ArrayList<Card> getSortedHand(ArrayList<Card> hand) {

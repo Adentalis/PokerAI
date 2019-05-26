@@ -44,7 +44,7 @@ public class Deck {
         deck.add(new Card(Colour.HEARTS,Value.JACK));
         deck.add(new Card(Colour.HEARTS,Value.TEN));
         deck.add(new Card(Colour.HEARTS,Value.NINE));
-        deck.add(new Card(Colour.HEARTS,Value.EIGEHT));
+        deck.add(new Card(Colour.HEARTS,Value.EIGHT));
         deck.add(new Card(Colour.HEARTS,Value.SEVEN));
         deck.add(new Card(Colour.HEARTS,Value.SIX));
         deck.add(new Card(Colour.HEARTS,Value.FIVE));
@@ -58,7 +58,7 @@ public class Deck {
         deck.add(new Card(Colour.DIAMOND,Value.JACK));
         deck.add(new Card(Colour.DIAMOND,Value.TEN));
         deck.add(new Card(Colour.DIAMOND,Value.NINE));
-        deck.add(new Card(Colour.DIAMOND,Value.EIGEHT));
+        deck.add(new Card(Colour.DIAMOND,Value.EIGHT));
         deck.add(new Card(Colour.DIAMOND,Value.SEVEN));
         deck.add(new Card(Colour.DIAMOND,Value.SIX));
         deck.add(new Card(Colour.DIAMOND,Value.FIVE));
@@ -72,7 +72,7 @@ public class Deck {
         deck.add(new Card(Colour.SPADE,Value.JACK));
         deck.add(new Card(Colour.SPADE,Value.TEN));
         deck.add(new Card(Colour.SPADE,Value.NINE));
-        deck.add(new Card(Colour.SPADE,Value.EIGEHT));
+        deck.add(new Card(Colour.SPADE,Value.EIGHT));
         deck.add(new Card(Colour.SPADE,Value.SEVEN));
         deck.add(new Card(Colour.SPADE,Value.SIX));
         deck.add(new Card(Colour.SPADE,Value.FIVE));
@@ -86,7 +86,7 @@ public class Deck {
         deck.add(new Card(Colour.CLUBS,Value.JACK));
         deck.add(new Card(Colour.CLUBS,Value.TEN));
         deck.add(new Card(Colour.CLUBS,Value.NINE));
-        deck.add(new Card(Colour.CLUBS,Value.EIGEHT));
+        deck.add(new Card(Colour.CLUBS,Value.EIGHT));
         deck.add(new Card(Colour.CLUBS,Value.SEVEN));
         deck.add(new Card(Colour.CLUBS,Value.SIX));
         deck.add(new Card(Colour.CLUBS,Value.FIVE));

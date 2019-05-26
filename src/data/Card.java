@@ -38,7 +38,7 @@ public class Card implements Comparable<Card>{
                 return "6";
             case SEVEN:
                 return "7";
-            case EIGEHT:
+            case EIGHT:
                 return "8";
             case NINE:
                 return "9";
@@ -72,7 +72,7 @@ public class Card implements Comparable<Card>{
                 return 6;
             case SEVEN:
                 return 7;
-            case EIGEHT:
+            case EIGHT:
                 return 8;
             case NINE:
                 return 9;
