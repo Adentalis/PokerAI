@@ -176,24 +176,30 @@ public class Hand {
     }
 
     private void createQuads() {
-        bestHandToString += "Quads";
+        bestHandToString += "Quads - "+ quadsValue;
 
+        //add the four cards to best hand
         for(Card c : dummyHand ){
             if (c.getValue()== quadsValue){
                 bestHand.add(c);
-                bestHandToString+= " - " + getIntOutOfValue(quadsValue);
+
             }
         }
-        System.out.println(bestHand.size());
-        dummyHand.removeIf(c -> c.getValue() != quadsValue);
 
-        Card bestOfTheRest =getHighcardOfHand();
-        dummyHand.remove(bestOfTheRest);
-        bestHand.add(bestOfTheRest);
-        System.out.println(bestHand.size());
+        dummyHand.removeIf(c -> c.getValue() == quadsValue);
+
         value = 80000000000L;
         value += calculateValue(getIntOutOfValue(quadsValue),1);
-        value += calculateValue(getIntOutOfValue(bestOfTheRest.getValue()),2);
+
+        //in test case the is the possibility of just a hand-to-test with 4 cards --> so no 5. card can be checked
+        if(dummyHand.size()!= 0){
+            Card bestOfTheRest =getHighcardOfHand();
+            dummyHand.remove(bestOfTheRest);
+            bestHand.add(bestOfTheRest);
+            System.out.println("now calc  "+ calculateValue(getIntOutOfValue(bestOfTheRest.getValue()),2));
+            value += calculateValue(getIntOutOfValue(bestOfTheRest.getValue()),2);
+        }
+
 
     }
 
