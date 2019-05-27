@@ -7,7 +7,7 @@ public class Hand {
     private long value;
 
     public ArrayList<Card> hand;
-    public ArrayList<Card> sortedHand;
+    public ArrayList<Card> originalHand;
     public ArrayList<Card> bestHand;
     //dummy hand is a copy of normal hand in validate function. Cards will be removed from it and put to bestHand
     private ArrayList<Card> dummyHand;
@@ -38,6 +38,7 @@ public class Hand {
     private boolean highCard;
 
     public Hand(ArrayList<Card> hand) {
+        this.originalHand = hand;
         this.hand = getSortedHand(hand);
         this.bestHand= new ArrayList<>();
         validateHand();
@@ -64,7 +65,7 @@ public class Hand {
         highCard  = isHighCard();
         createBestHand();
         System.out.println("--------------");
-        System.out.println(bestHandToString +" --  value = "+valueToString());
+        System.out.println(bestHandToString +"   #####   value = "+valueToString());
 
 
     }
@@ -522,16 +523,8 @@ public class Hand {
 
     //TODO this is buggy - can get royal without real royal
     private boolean isStraightFlush() {
-        if (!flush)
-            return false;
-        else{
+       return flush && straight;
 
-
-
-
-
-            return true;
-        }
 
     }
 

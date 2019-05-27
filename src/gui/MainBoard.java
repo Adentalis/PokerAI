@@ -16,10 +16,10 @@ import java.util.ArrayList;
 public class MainBoard implements ActionListener, Serializable {
     private JFrame jframe = new JFrame("AntiCHESS");
 
-    public JButton card1, card2, flop1, flop2, flop3, turn, river;
-    public JButton[] cardButtons = new JButton[7];
-
-
+    public JButton p1card1, p1card2, p2card1, p2card2, flop1, flop2, flop3, turn, river;
+    public JButton[] boardCards = new JButton[5];
+    public JButton[] p1Cards = new JButton[2];
+    public JButton[] p2Cards = new JButton[2];
     public MainBoard() {
 
         jframe.setSize(1200, 800);
@@ -39,16 +39,23 @@ public class MainBoard implements ActionListener, Serializable {
     }
 
     private void initCards() {
-        card1 = new JButton();
-        card1.setSize(100, 160);
-        card1.setLocation(490, 500);
-        card1.addActionListener(this);
+        p1card1 = new JButton();
+        p1card1.setSize(100, 160);
+        p1card1.setLocation(490, 500);
+        p1card1.addActionListener(this);
 
+        p1card2 = new JButton();
+        p1card2.setSize(100, 160);
+        p1card2.setLocation(610, 500);
 
+        p2card1 = new JButton();
+        p2card1.setSize(100, 160);
+        p2card1.setLocation(490, 100);
 
-        card2 = new JButton();
-        card2.setSize(100, 160);
-        card2.setLocation(610, 500);
+        p2card2 = new JButton();
+        p2card2.setSize(100, 160);
+        p2card2.setLocation(610, 100);
+
 
         flop1 = new JButton();
         flop1.setSize(100, 160);
@@ -70,41 +77,33 @@ public class MainBoard implements ActionListener, Serializable {
         river.setSize(100, 160);
         river.setLocation(790, 300);
 
-        /*
-        ImageIcon img1 = new ImageIcon("src/res/small/10C.jpg");
-        card1.setIcon(img1);
-        card2.setIcon(img1);
-        flop1.setIcon(img1);
-        flop2.setIcon(img1);
-        flop3.setIcon(img1);
-        turn.setIcon(img1);
-        river.setIcon(img1);
-        */
+        boardCards[0] = flop1;
+        boardCards[1] = flop2;
+        boardCards[2] = flop3;
+        boardCards[3] = turn;
+        boardCards[4] = river;
 
-        cardButtons[0] = card1;
-        cardButtons[1] = card2;
-        cardButtons[2] = flop1;
-        cardButtons[3] = flop2;
-        cardButtons[4] = flop3;
-        cardButtons[5] = turn;
-        cardButtons[6] = river;
+        p1Cards[0]= p1card1;
+        p1Cards[1]= p1card2;
+        p2Cards[0]= p2card1;
+        p2Cards[1]= p2card2;
 
-
-        jframe.add(card1);
-        jframe.add(card2);
+        jframe.add(p1card1);
+        jframe.add(p1card2);
+        jframe.add(p2card1);
+        jframe.add(p2card2);
         jframe.add(flop1);
         jframe.add(flop2);
         jframe.add(flop3);
         jframe.add(turn);
         jframe.add(river);
-
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
         System.out.println(e.getSource());
 
-        if (e.getSource() == this.card1) {
+        if (e.getSource() == this.p1card1) {
             System.out.println("But)"+e.getSource());
             System.out.println();
         }
@@ -282,22 +281,38 @@ public class MainBoard implements ActionListener, Serializable {
         return img;
     }
 
-    public void update7Cards(Hand hand) {
+    public void showBoardCards(ArrayList<Card> hand) {
 
-        for (int i = 0; i < cardButtons.length; i++) {
-
-            if(i < hand.hand.size()) {
-                ImageIcon img = getImageIconForCard(hand.hand.get(i));
-
-                cardButtons[i].setIcon(img);
-            }else{
-                cardButtons[i].setIcon(null);
-            }
-        }
+        setImage(hand, boardCards);
 
     }
 
-    public void showHandOnGui(ArrayList<Card> bestHand_array) {
+    public void showPlayerOneCards(ArrayList<Card> hand) {
+
+        setImage(hand, p1Cards);
+
+    }
+
+    public void showPlayerTwoCards(ArrayList<Card> hand) {
+
+        setImage(hand, p2Cards);
+
+    }
+
+    private void setImage(ArrayList<Card> hand, JButton[] cards) {
+        for (int i = 0; i < cards.length; i++) {
+
+            if(i <= hand.size()) {
+                ImageIcon img = getImageIconForCard(hand.get(i));
+                cards[i].setIcon(img);
+            }else{
+                cards[i].setIcon(null);
+            }
+        }
+    }
+
+    //this opens a new Gui - just for tests at start
+    public void showHandOnGui(ArrayList<Card> bestHand_array)  {
         JFrame jframeBest = new JFrame("BEST-HAND-GUI");
         jframeBest.setSize(880, 255);
         Dimension dimension = Toolkit.getDefaultToolkit().getScreenSize();
@@ -346,7 +361,7 @@ public class MainBoard implements ActionListener, Serializable {
 
 
 
-        for (int i = 0; i < cardButtons.length; i++) {
+        for (int i = 0; i < boardCards.length; i++) {
 
             if(i < bestHand_array.size()) {
                 ImageIcon img = getImageIconForCard(bestHand_array.get(i));
