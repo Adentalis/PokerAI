@@ -378,7 +378,7 @@ public class HandTestGui implements ActionListener, KeyListener {
         Hand hand = new Hand(hand_array);
        // mainBoard.update7Cards(hand);
         //mainBoard.showHandOnGui(hand_array);
-        hand.validateHand();
+        //hand.validateHand();
 
 
        // ArrayList<Card> best = hand.getBestHand();

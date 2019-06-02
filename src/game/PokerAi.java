@@ -4,7 +4,7 @@ import gui.HandTestGui;
 
 
 public class PokerAi {
-    private static final boolean HANDTEST_GAMEMODE = false;
+    private static final boolean HANDTEST_GAMEMODE = true;
     public static void main(String[] args)
 
     {

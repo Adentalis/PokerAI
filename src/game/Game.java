@@ -32,15 +32,7 @@ public class Game {
 
     }
 
-    private void test() {
-        ArrayList<Card> cards = new ArrayList<>();
-        for (int i = 0; i < 7; i++) {
-            cards.add(deck.getCard());
-        }
-        Hand h = new Hand(cards);
-        h.validateHand();
 
-    }
 
     private void initGame() {
         mainBoard = new MainBoard();
